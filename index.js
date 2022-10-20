@@ -5,6 +5,8 @@
 
 const maxLayer = 4;
 
+const isNode = typeof process === "object";
+
 /** @enum {string} */
 const enumSubShape = {
   rect: "rect",
@@ -90,15 +92,15 @@ for (const key in enumColorToShortcode) {
   enumShortcodeToColor[enumColorToShortcode[key]] = key;
 }
 
-CanvasRenderingContext2D.prototype.beginCircle = function (x, y, r) {
+function beginCircle(c, x, y, r) {
   if (r < 0.05) {
-    this.beginPath();
-    this.rect(x, y, 1, 1);
+    c.beginPath();
+    c.rect(x, y, 1, 1);
     return;
   }
-  this.beginPath();
-  this.arc(x, y, r, 0, 2.0 * Math.PI);
-};
+  c.beginPath();
+  c.arc(x, y, r, 0, 2.0 * Math.PI);
+}
 
 const possibleShapesString = Object.keys(enumShortcodeToSubShape).join("");
 const possibleColorsString = Object.keys(enumShortcodeToColor).join("");
@@ -159,10 +161,12 @@ function fromShortKey(key) {
   return layers;
 }
 
+if (isNode) module.exports.fromShortKey = fromShortKey;
+
 function renderShape(layers) {
-  const canvas = /** @type {HTMLCanvasElement} */ (document.getElementById(
-    "result"
-  ));
+  const canvas = /** @type {HTMLCanvasElement} */ (
+    document.getElementById("result")
+  );
   const context = canvas.getContext("2d");
 
   context.save();
@@ -182,7 +186,7 @@ function renderShape(layers) {
   const quadrantHalfSize = quadrantSize / 2;
 
   context.fillStyle = "rgba(40, 50, 65, 0.1)";
-  context.beginCircle(0, 0, quadrantSize * 1.15);
+  beginCircle(context, 0, 0, quadrantSize * 1.15);
   context.fill();
 
   for (let layerIndex = 0; layerIndex < layers.length; ++layerIndex) {
@@ -301,7 +305,7 @@ function showError(msg) {
 }
 
 // @ts-ignore
-window.generate = () => {
+function generate() {
   showError(null);
   // @ts-ignore
   const code = document.getElementById("code").value.trim();
@@ -315,26 +319,28 @@ window.generate = () => {
   }
 
   renderShape(parsed);
-};
+}
 
 // @ts-ignore
-window.debounce = (fn) => {
+function debounce(fn) {
   setTimeout(fn, 0);
-};
+}
 
-// @ts-ignore
-window.addEventListener("load", () => {
-  if (window.location.search) {
-    var key = window.location.search.substr(1);
-    if (key.indexOf(".") >= 0) {
-      key = key.replace(/\./gi, ":");
+if (!isNode) {
+  // @ts-ignore
+  window.addEventListener("load", () => {
+    if (window.location.search) {
+      var key = window.location.search.substr(1);
+      if (key.indexOf(".") >= 0) {
+        key = key.replace(/\./gi, ":");
+      }
+      document.getElementById("code").value = key;
     }
-    document.getElementById("code").value = key;
-  }
-  generate();
-});
+    generate();
+  });
+}
 
-window.exportShape = () => {
+function exportShape() {
   const canvas = document.getElementById("result");
   const imageURL = canvas.toDataURL("image/png");
 
@@ -350,18 +356,18 @@ window.exportShape = () => {
   document.body.appendChild(dummyLink);
   dummyLink.click();
   document.body.removeChild(dummyLink);
-};
+}
 
-window.viewShape = (key) => {
+function viewShape(key) {
   document.getElementById("code").value = key;
   generate();
-};
+}
 
-window.shareShape = () => {
+function shareShape() {
   const code = document.getElementById("code").value.trim();
   const url = "https://viewer.shapez.io?" + code.replace(/:/gi, ".");
   alert("You can share this url: " + url);
-};
+}
 
 function getRandomInt(max) {
   return Math.floor(Math.random() * Math.floor(max));
@@ -379,7 +385,7 @@ function getRandomColor() {
   ];
 }
 
-window.randomShape = () => {
+function randomShape() {
   let layers = getRandomInt(maxLayer);
   let code = "";
   for (var i = 0; i <= layers; i++) {
@@ -404,4 +410,4 @@ window.randomShape = () => {
   code = code.replace(/:+$/, "");
   document.getElementById("code").value = code;
   generate();
-};
+}
