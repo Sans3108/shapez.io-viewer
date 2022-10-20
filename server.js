@@ -2,21 +2,22 @@ const express = require("express");
 const fs = require("fs");
 const app = express();
 
-const index = require('./index.js');
+//const index = require('./index.js');
 
 const PORT = 3000;
 
 app.get("/", (req, res) => {
   // I'm lost
 
-  console.log(Object.keys(req.query)[0]);
+  const shape = Object.keys(req.query)[0];
 
   let htmlString = fs.readFileSync("./index.html", {
     encoding: "utf8",
     flag: "r",
   });
-  htmlString.replace("{{TITLE}}", req.query.title);
-  htmlString.replace("{{IMAGEDATA}}", req.query.image);
+  htmlString = htmlString
+    .replace("{{TITLE}}", shape)
+    .replace("{{IMAGEDATA}}", "test");
 
   res.send(htmlString);
 });
