@@ -12,22 +12,27 @@ app.get("/", (req, res) => {
   const shape = Object.keys(req.query)[0];
 
   let layers = null;
-  try {
-    layers = index.fromShortKey(shape);
-  } catch (err) {
-    layers = err.message;
+  if (shape) {
+    try {
+      layers = index.fromShortKey(shape);
+    } catch (err) {
+      layers = err.message;
+    }
   }
 
-  console.log(layers);
+  const image = null;
 
   let htmlString = fs.readFileSync("./index.html", {
     encoding: "utf8",
     flag: "r",
   });
   htmlString = htmlString
-    .replace("{{TITLE}}", shape)
-    .replace("{{IMAGEDATA}}", "test")
-    .replace("{{DESCRIPTION}}", typeof layers === 'string' ? `Error: ${layers}` : '');
+    .replace("{{TITLE}}", shape || "Shape Generator")
+    .replace("{{IMAGEDATA}}", image || 'logo.png')
+    .replace(
+      "{{DESCRIPTION}}",
+      typeof layers === "string" ? `Error: ${layers}` : ""
+    );
 
   res.send(htmlString);
 });
