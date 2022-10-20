@@ -166,7 +166,7 @@ function renderShape(layers) {
   const context = canvas.getContext("2d");
 
   context.save();
-  context.fillStyle = "#fff";
+  context.fillStyle = "transparent";
 
   const w = 512;
   const h = 512;
