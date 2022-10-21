@@ -2,7 +2,7 @@ const express = require("express");
 const fs = require("fs");
 const app = express();
 
-const index = require("./index.js");
+const index = require("./public/index.js");
 
 const PORT = 3000;
 
@@ -22,7 +22,7 @@ app.get("/", (req, res) => {
 
   const image = null;
 
-  let htmlString = fs.readFileSync("./index.html", {
+  let htmlString = fs.readFileSync("./public/index.html", {
     encoding: "utf8",
     flag: "r",
   });
@@ -37,7 +37,7 @@ app.get("/", (req, res) => {
   res.send(htmlString);
 });
 
-app.use(express.static("./"));
+app.use(express.static("./public"));
 
 app.listen(PORT, (err) => {
   if (err) console.error(err);

@@ -1,14 +1,14 @@
 {
-    "name": "shape_generator",
-    "version": "1.0.0",
-    "main": "server.js",
-    "license": "MIT",
-    "private": true,
-    "devDependencies": {
-        "express": "^4.18.2",
-        "http-server": "^0.12.3"
-    },
-    "scripts": {
-        "serve": "http-server . -p 9000 -g --cors -o -c-1"
-    }
+  "name": "shape_generator",
+  "version": "1.0.0",
+  "main": "server.js",
+  "license": "MIT",
+  "private": true,
+  "devDependencies": {
+    "express": "^4.18.2",
+    "http-server": "^0.12.3"
+  },
+  "scripts": {
+    "serve": "http-server . -p 9000 -g --cors -o -c-1"
+  }
 }
