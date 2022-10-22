@@ -9,30 +9,53 @@ const PORT = 3000;
 app.get("/", (req, res) => {
   // I'm lost
 
-  const shape = Object.keys(req.query)[0];
+  const shapeCode = Object.keys(req.query)[0]?.replace(/\./gi, ":");
+
+  let image = "logo.png";
 
   let layers = null;
-  if (shape) {
+  let canvas = null;
+  let imageURL = null;
+  let error = null;
+  let lError = null;
+
+  if (shapeCode) {
     try {
-      layers = index.fromShortKey(shape);
+      layers = index.fromShortKey(shapeCode);
     } catch (err) {
-      layers = err.message;
+      error = err.message;
+      lError = err.message;
     }
   }
 
-  const image = null;
+  if (layers && !error) {
+    try {
+      canvas = index.renderShape(layers);
+    } catch (err) {
+      error = err.message;
+    }
+  }
+
+  if (canvas && !error) {
+    try {
+      imageURL = index.exportShape(canvas);
+    } catch (err) {
+      error = err.message;
+    }
+  }
+
+  if (imageURL && !error) {
+    image = imageURL;
+  }
 
   let htmlString = fs.readFileSync("./public/index.html", {
     encoding: "utf8",
     flag: "r",
   });
   htmlString = htmlString
-    .replace("{{TITLE}}", shape || "Shape Generator")
-    .replace("{{IMAGEDATA}}", image || 'logo.png')
-    .replace(
-      "{{DESCRIPTION}}",
-      typeof layers === "string" ? `Error: ${layers}` : ""
-    );
+    .replace("{{TITLE}}", shapeCode || "Shape Generator")
+    .replace("{{IMAGEDATA}}", image || "logo.png")
+    .replace("{{DESCRIPTION}}", lError ? `Error: ${lError}` : "");
 
   res.send(htmlString);
 });

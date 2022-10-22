@@ -164,9 +164,9 @@ function fromShortKey(key) {
 if (isNode) module.exports.fromShortKey = fromShortKey;
 
 function renderShape(layers) {
-  const canvas = /** @type {HTMLCanvasElement} */ (
-    document.getElementById("result")
-  );
+  const canvas = isNode
+    ? require("canvas").createCanvas(512, 512)
+    : document.getElementById("result");
   const context = canvas.getContext("2d");
 
   context.save();
@@ -290,7 +290,11 @@ function renderShape(layers) {
   }
 
   context.restore();
+
+  if (isNode) return canvas;
 }
+
+if (isNode) module.exports.renderShape = renderShape;
 
 /////////////////////////////////////////////////////
 
@@ -340,10 +344,13 @@ if (!isNode) {
   });
 }
 
-function exportShape() {
-  const canvas = document.getElementById("result");
+function exportShape(canvas) {
+  if (!canvas) {
+    canvas = document.getElementById("result");
+  }
   const imageURL = canvas.toDataURL("image/png");
 
+  if (isNode) return imageURL;
   const dummyLink = document.createElement("a");
   dummyLink.download = "shape.png";
   dummyLink.href = imageURL;
@@ -358,6 +365,8 @@ function exportShape() {
   document.body.removeChild(dummyLink);
 }
 
+if (isNode) module.exports.exportShape = exportShape;
+
 function viewShape(key) {
   document.getElementById("code").value = key;
   generate();
@@ -365,8 +374,16 @@ function viewShape(key) {
 
 function shareShape() {
   const code = document.getElementById("code").value.trim();
-  const url = "https://viewer.shapez.io?" + code.replace(/:/gi, ".");
-  alert("You can share this url: " + url);
+  const url = "https://shapez.sans-stuff.xyz/?" + code.replace(/:/gi, ".");
+
+  let temp = document.createElement('input');
+  temp.value = url;
+  document.body.appendChild(temp);
+  temp.select();
+  document.execCommand("copy");
+  document.body.removeChild(temp);
+
+  confirm("The URL has been copied to your clipboard!");
 }
 
 function getRandomInt(max) {
@@ -396,7 +413,6 @@ function randomShape() {
 
       if (randomShape === "-") {
         randomColor = "-";
-        console.log("in");
       }
       layertext = layertext + randomShape + randomColor;
     }

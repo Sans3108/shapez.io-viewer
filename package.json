@@ -10,5 +10,8 @@
   },
   "scripts": {
     "serve": "http-server . -p 9000 -g --cors -o -c-1"
+  },
+  "dependencies": {
+    "canvas": "^2.10.1"
   }
 }
