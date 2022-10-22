@@ -12,6 +12,7 @@ app.get("/", (req, res) => {
   const shapeCode = Object.keys(req.query)[0]?.replace(/\./gi, ":");
 
   let image = "logo.png";
+  let url = "https://shapez.sans-stuff.xyz";
 
   let layers = null;
   let canvas = null;
@@ -20,6 +21,7 @@ app.get("/", (req, res) => {
   let lError = null;
 
   if (shapeCode) {
+    url = url + `/${code.replace(/:/gi, ".")}`;
     try {
       layers = index.fromShortKey(shapeCode);
     } catch (err) {
@@ -52,10 +54,13 @@ app.get("/", (req, res) => {
     encoding: "utf8",
     flag: "r",
   });
+
+  // IMAGEDATA, TITLE, DESCRIPTION, URL
   htmlString = htmlString
-    .replace("{{TITLE}}", shapeCode || "Shape Generator")
-    .replace("{{IMAGEDATA}}", image || "logo.png")
-    .replace("{{DESCRIPTION}}", lError ? `Error: ${lError}` : "");
+    .replaceAll("{{TITLE}}", shapeCode || "Shape Generator")
+    .replaceAll("{{IMAGEDATA}}", image || "logo.png")
+    .replaceAll("{{DESCRIPTION}}", lError ? `Error: ${lError}` : "")
+    .replaceAll("{{URL}}", url);
 
   res.send(htmlString);
 });
