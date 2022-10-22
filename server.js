@@ -21,7 +21,7 @@ app.get("/", (req, res) => {
   let lError = null;
 
   if (shapeCode) {
-    url = url + `/${code.replace(/:/gi, ".")}`;
+    url = url + `/${shapeCode.replace(/:/gi, ".")}`;
     try {
       layers = index.fromShortKey(shapeCode);
     } catch (err) {
