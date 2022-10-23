@@ -13,7 +13,7 @@ const options = {
 
 const index = require("./public/index.js");
 
-const PORT = 80;
+const PORT = 443;
 
 app.get("/", (req, res) => {
   // I'm lost
