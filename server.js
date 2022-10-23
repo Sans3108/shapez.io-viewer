@@ -1,6 +1,15 @@
 const express = require("express");
+const https = require('https');
 const fs = require("fs");
 const app = express();
+
+const key = fs.readFileSync('./cert/selfsigned.key');
+const cert = fs.readFileSync('./cert/selfsigned.crt');
+
+const options = {
+  key: key,
+  cert: cert
+};
 
 const index = require("./public/index.js");
 
@@ -67,7 +76,8 @@ app.get("/", (req, res) => {
 
 app.use(express.static("./public"));
 
-app.listen(PORT, (err) => {
-  if (err) console.error(err);
+const server = https.createServer(options, app);
+
+server.listen(PORT, () => {
   console.log(`Server listening on port ${PORT}`);
 });
