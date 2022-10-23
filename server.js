@@ -1,19 +1,19 @@
 const express = require("express");
-const https = require('https');
+//const https = require('https');
 const fs = require("fs");
 const app = express();
 
-const cert = fs.readFileSync('./cert/cert.pem');
-const key = fs.readFileSync('./cert/private.key');
+// const cert = fs.readFileSync('./cert/cert.pem');
+// const key = fs.readFileSync('./cert/private.key');
 
-const options = {
-  key: key,
-  cert: cert
-};
+// const options = {
+//   key: key,
+//   cert: cert
+// };
 
 const index = require("./public/index.js");
 
-const PORT = 443;
+const PORT = 80;
 
 app.get("/", (req, res) => {
   // I'm lost
@@ -76,8 +76,8 @@ app.get("/", (req, res) => {
 
 app.use(express.static("./public"));
 
-const server = https.createServer(options, app);
+//const server = https.createServer(options, app);
 
-server.listen(PORT, () => {
+app.listen(PORT, () => {
   console.log(`Server listening on port ${PORT}`);
 });
