@@ -13,7 +13,7 @@ const app = express();
 
 const index = require("./public/index.js");
 
-const PORT = 80;
+const PORT = 3000;
 
 app.get("/", (req, res) => {
   // I'm lost
