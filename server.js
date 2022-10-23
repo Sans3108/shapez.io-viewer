@@ -3,8 +3,8 @@ const https = require('https');
 const fs = require("fs");
 const app = express();
 
-const key = fs.readFileSync('./cert/key.pem');
 const cert = fs.readFileSync('./cert/cert.pem');
+const key = fs.readFileSync('./cert/private.key');
 
 const options = {
   key: key,
