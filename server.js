@@ -39,7 +39,9 @@ app.get("/", async (req, res) => {
 
   if (canvas && !error) {
     try {
-      imageURL = `https://shapez.sans-stuff.xyz/image/?data=${encodeURIComponent(index.exportShape(canvas))}`;
+      imageURL = `https://shapez.sans-stuff.xyz/image/?data=${encodeURIComponent(
+        index.exportShape(canvas)
+      )}`;
 
       //console.log(imageURL);
     } catch (err) {
@@ -61,21 +63,40 @@ app.get("/", async (req, res) => {
   // IMAGEDATA, TITLE, DESCRIPTION, URL
   htmlString = htmlString
     .replaceAll("{{TITLE}}", shapeCode || "Shape Generator")
-    .replaceAll("{{IMAGEDATA}}", image || "https://shapez.sans-stuff.xyz/logo.png")
+    .replaceAll(
+      "{{IMAGEDATA}}",
+      image || "https://shapez.sans-stuff.xyz/logo.png"
+    )
     .replaceAll("{{DESCRIPTION}}", lError ? `Error: ${lError}` : "")
     .replaceAll("{{URL}}", url);
 
   res.send(htmlString);
 });
 
-app.get("/image", (req, res) => {
+// app.get("/image", (req, res) => {
 
-  try {
-    const file = Buffer.from(req.query.data.split(",")[1], "base64");
-    res.writeHead(200, { "Content-Length": file.length }).end(file);
-  } catch (e) {
-    return;
-  }
+//   try {
+//     const file = Buffer.from(req.query.data.split(",")[1], "base64");
+//     res.writeHead(200, { "Content-Length": file.length }).end(file);
+//   } catch (e) {
+//     return;
+//   }
+// });
+
+app.get("/test", (req, res) => {
+  res.send(
+    `<head><title>test</title><meta name="og:image" content="https://shapez.sans-stuff.xyz/image/?data=${encodeURIComponent(
+      test
+    )}"></head>`
+  );
+});
+app.get("/image", function (req, res) {
+  let img = Buffer.from(req.query.data.split(",")[1], "base64");
+  res.writeHead(200, {
+    "Content-Type": "image/png",
+    "Content-Length": img.length,
+  });
+  res.end(img);
 });
 
 app.use(express.static("./public"));
