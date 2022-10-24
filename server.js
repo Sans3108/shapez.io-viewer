@@ -39,7 +39,7 @@ app.get("/", async (req, res) => {
 
   if (canvas && !error) {
     try {
-      imageURL = `/image/?data=${encodeURIComponent(index.exportShape(canvas))}`;
+      imageURL = `https://shapez.sans-stuff.xyz/image/?data=${encodeURIComponent(index.exportShape(canvas))}`;
 
       //console.log(imageURL);
     } catch (err) {
@@ -61,7 +61,7 @@ app.get("/", async (req, res) => {
   // IMAGEDATA, TITLE, DESCRIPTION, URL
   htmlString = htmlString
     .replaceAll("{{TITLE}}", shapeCode || "Shape Generator")
-    .replaceAll("{{IMAGEDATA}}", image || "./logo.png")
+    .replaceAll("{{IMAGEDATA}}", image || "https://shapez.sans-stuff.xyz/logo.png")
     .replaceAll("{{DESCRIPTION}}", lError ? `Error: ${lError}` : "")
     .replaceAll("{{URL}}", url);
 
@@ -69,6 +69,7 @@ app.get("/", async (req, res) => {
 });
 
 app.get("/image", (req, res) => {
+
   try {
     const file = Buffer.from(req.query.data.split(",")[1], "base64");
     res.writeHead(200, { "Content-Length": file.length }).end(file);
