@@ -58,7 +58,7 @@ app.get("/", (req, res) => {
   // IMAGEDATA, TITLE, DESCRIPTION, URL
   htmlString = htmlString
     .replaceAll("{{TITLE}}", shapeCode || "Shape Generator")
-    .replaceAll("{{IMAGEDATA}}", image || "logo.png")
+    .replaceAll("{{IMAGEDATA}}", image || "./logo.png")
     .replaceAll("{{DESCRIPTION}}", lError ? `Error: ${lError}` : "")
     .replaceAll("{{URL}}", url);
 
