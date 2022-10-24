@@ -73,7 +73,7 @@ app.get("/", async (req, res) => {
 
 app.get("/image", (req, res) => {
   try {
-    const file = Buffer.from(index.exportShape(req.query.code), "base64");
+    const file = Buffer.from(index.exportShape(req.query.data), "base64");
     res.writeHead(200, { "Content-Length": file.length }).end(file);
   } catch (e) {
     return;
