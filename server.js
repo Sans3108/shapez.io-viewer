@@ -83,13 +83,6 @@ app.get("/", async (req, res) => {
 //   }
 // });
 
-app.get("/test", (req, res) => {
-  res.send(
-    `<head><title>test</title><meta name="og:image" content="https://shapez.sans-stuff.xyz/image/?data=${encodeURIComponent(
-      test
-    )}"></head>`
-  );
-});
 app.get("/image", function (req, res) {
   let img = Buffer.from(req.query.data.split(",")[1], "base64");
   res.writeHead(200, {
