@@ -1,14 +1,13 @@
 const express = require("express");
 const fs = require("fs");
+
 const app = express();
 
 const index = require("./public/index.js");
 
 const PORT = 3000;
 
-app.get("/", (req, res) => {
-  // I'm lost
-
+app.get("/", async (req, res) => {
   const shapeCode = Object.keys(req.query)[0]?.replace(/\./gi, ":");
 
   let image = "logo.png";
@@ -40,11 +39,15 @@ app.get("/", (req, res) => {
 
   if (canvas && !error) {
     try {
-      imageURL = index.exportShape(canvas);
+      imageURL = `/image/?data=${encodeURIComponent(index.exportShape(canvas))}`;
+
+      //console.log(imageURL);
     } catch (err) {
       error = err.message;
     }
   }
+
+  if (error) console.error(error);
 
   if (imageURL && !error) {
     image = imageURL;
@@ -65,8 +68,18 @@ app.get("/", (req, res) => {
   res.send(htmlString);
 });
 
+app.get("/image", (req, res) => {
+  try {
+    const file = Buffer.from(req.query.data.split(",")[1], "base64");
+    res.writeHead(200, { "Content-Length": file.length }).end(file);
+  } catch (e) {
+    return;
+  }
+});
+
 app.use(express.static("./public"));
 
-app.listen(PORT, () => {
+app.listen(PORT, (err) => {
+  if (err) console.error(err);
   console.log(`Server listening on port ${PORT}`);
 });

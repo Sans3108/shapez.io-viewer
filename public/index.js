@@ -165,15 +165,15 @@ if (isNode) module.exports.fromShortKey = fromShortKey;
 
 function renderShape(layers) {
   const canvas = isNode
-    ? require("canvas").createCanvas(512, 512)
+    ? require("canvas").createCanvas(200, 200)
     : document.getElementById("result");
   const context = canvas.getContext("2d");
 
   context.save();
   context.fillStyle = "#fff";
 
-  const w = 512;
-  const h = 512;
+  const w = isNode ? 200 : 512;
+  const h = isNode ? 200 : 512;
   const dpi = 1;
   context.fillRect(0, 0, w, h);
 
