@@ -1,5 +1,6 @@
 const express = require("express");
 const fs = require("fs");
+const path = require("path");
 
 const app = express();
 
@@ -10,48 +11,7 @@ const PORT = 3000;
 app.get("/", async (req, res) => {
   const shapeCode = Object.keys(req.query)[0]?.replace(/\./gi, ":");
 
-  let image = "logo.png";
-  let url = "https://shapez.sans-stuff.xyz";
-
-  let layers = null;
-  let canvas = null;
-  let imageURL = null;
-  let error = null;
-  let lError = null;
-
-  if (shapeCode) {
-    url = url + `/${shapeCode.replace(/:/gi, ".")}`;
-    try {
-      layers = index.fromShortKey(shapeCode);
-    } catch (err) {
-      error = err.message;
-      lError = err.message;
-    }
-  }
-
-  if (layers && !error) {
-    try {
-      canvas = index.renderShape(layers);
-    } catch (err) {
-      error = err.message;
-    }
-  }
-
-  if (canvas && !error) {
-    try {
-      imageURL = `https://shapez.sans-stuff.xyz/image/?data=${shapeCode}`;
-
-      //console.log(imageURL);
-    } catch (err) {
-      error = err.message;
-    }
-  }
-
-  if (error) console.error(error);
-
-  if (imageURL && !error) {
-    image = imageURL;
-  }
+  const imageURL = `https://shapez.sans-stuff.xyz/image?code=${shapeCode}`;
 
   let htmlString = fs.readFileSync("./public/index.html", {
     encoding: "utf8",
@@ -63,7 +23,7 @@ app.get("/", async (req, res) => {
     .replaceAll("{{TITLE}}", shapeCode || "Shape Generator")
     .replaceAll(
       "{{IMAGEDATA}}",
-      image || "https://shapez.sans-stuff.xyz/logo.png"
+      shapeCode ? imageURL : "https://shapez.sans-stuff.xyz/logo.png"
     )
     .replaceAll("{{DESCRIPTION}}", lError ? `Error: ${lError}` : "")
     .replaceAll("{{URL}}", url);
@@ -71,13 +31,27 @@ app.get("/", async (req, res) => {
   res.send(htmlString);
 });
 
+// I coulda done this better tbh
 app.get("/image", (req, res) => {
+  const shapeCode = req.query.code?.replace(/\./gi, ":");
+
+  let file;
+  let err;
+
   try {
-    const file = Buffer.from(index.exportShape(req.query.data), "base64");
-    res.writeHead(200, { "Content-Length": file.length }).end(file);
+    file = Buffer.from(
+      index.exportShape(index.renderShape(index.fromShortKey(shapeCode))),
+      "base64"
+    );
   } catch (e) {
-    return console.log('MF ERROR:' + e);
+    err = e;
   }
+
+  if (err) {
+    console.error(err);
+    return res.sendFile(path.join(__dirname, "./public", "n.png"));
+  }
+  res.writeHead(200, { "Content-Length": file.length }).end(file);
 });
 
 app.use(express.static("./public"));

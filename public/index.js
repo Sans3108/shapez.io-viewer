@@ -348,9 +348,9 @@ function exportShape(canvas) {
   if (!canvas) {
     canvas = document.getElementById("result");
   }
+  if (isNode) return canvas.toBuffer();
+  
   const imageURL = canvas.toDataURL("image/png");
-
-  if (isNode) return imageURL;
   const dummyLink = document.createElement("a");
   dummyLink.download = "shape.png";
   dummyLink.href = imageURL;
