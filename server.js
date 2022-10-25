@@ -25,7 +25,6 @@ app.get("/", async (req, res) => {
       "{{IMAGEDATA}}",
       shapeCode ? imageURL : "https://shapez.sans-stuff.xyz/logo.png"
     )
-    .replaceAll("{{DESCRIPTION}}", lError ? `Error: ${lError}` : "")
     .replaceAll("{{URL}}", url);
 
   res.send(htmlString);
@@ -46,6 +45,8 @@ app.get("/image", (req, res) => {
   } catch (e) {
     err = e;
   }
+
+  res.contentType("png");
 
   if (err) {
     console.error(err);
