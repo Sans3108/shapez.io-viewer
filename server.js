@@ -11,7 +11,10 @@ const PORT = 3000;
 app.get("/", async (req, res) => {
   const shapeCode = Object.keys(req.query)[0]?.replace(/\./gi, ":");
 
-  const imageURL = `https://shapez.sans-stuff.xyz/image?code=${shapeCode}`;
+  const imageURL = `https://shapez.sans-stuff.xyz/image/?code=${shapeCode}`;
+
+  const url =
+    "https://shapez.sans-stuff.xyz/" + (shapeCode ? `?${shapeCode}` : "");
 
   let htmlString = fs.readFileSync("./public/index.html", {
     encoding: "utf8",
