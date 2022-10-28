@@ -1,20 +1,20 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title>shapez.io shape generator</title>
+    <title>Shape Viewer</title>
     <meta name="viewport" content="width=device-width, initial-scale=1" />
 
     <!-- embed stuff -->
-    <meta property="og:image" content="{{IMAGEDATA}}" />
-    <meta name="theme-color" content="#66a7ff" />
-    <meta name="title" content="{{TITLE}}">
-    <meta property="og:type" content="website">
-    <meta property="og:url" content="{{URL}}">
-    <meta property="og:title" content="{{TITLE}}">
-    <meta property="twitter:card" content="summary_large_image">
-    <meta property="twitter:url" content="{{URL}}">
-    <meta property="twitter:title" content="{{TITLE}}">
-    <meta property="twitter:image" content="{{IMAGEDATA}}">
+    <meta property="og:image" content="<%= imageURL %>" />
+    <meta name="theme-color" content="<%= color %>" />
+    <meta name="title" content="Shape Viewer" />
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="<%= url %>" />
+    <meta property="og:title" content="Shape Viewer" />
+    <meta property="twitter:card" content="summary_large_image" />
+    <meta property="twitter:url" content="<%= url %>" />
+    <meta property="twitter:title" content="Shape Viewer" />
+    <meta property="twitter:image" content="<%= imageURL %>" />
 
     <link rel="stylesheet" href="index.css" media="all" />
     <script async src="index.js"></script>
@@ -42,14 +42,21 @@
           onkeyup="debounce(generate)"
           onchange="debounce(generate)"
         />
-        <div id="error">Error</div>
-        <br />
+        <div id="error"></div>
 
         <div id="resultWrapper">
-          <canvas id="result" width="512" height="512"></canvas>
+          <canvas
+            id="result"
+            width="512"
+            height="512"
+            onclick="randomShape()"
+          ></canvas>
         </div>
-        <button onclick="exportShape()">Export</button>
-        <button onclick="shareShape()">Share</button>
+        <div id="sharing">Hello :)</div>
+        <div class="btn-wrapper">
+          <button onclick="exportShape()">Export</button>
+          <button onclick="shareShape()">Share</button>
+        </div>
       </div>
       <div class="col infoBox">
         <h2>About</h2>
@@ -61,7 +68,9 @@
           This is a fork of the original website, the purpose of it was to make
           sharing shapes easier as now an image of your shape will be displayed
           in a nice embed on almost any website, without needing to visit the
-          website in order to see it! Original website can be found
+          website in order to see it! <br />
+          <em>It's also got a nicer look :)</em><br /><br />
+          Original website can be found
           <a target="_blank" href="https://viewer.shapez.io">here</a>.
         </p>
 
@@ -162,15 +171,13 @@
             document.write(`
                 <div class="example">
                     <code>${key}</code><label>${desc}</label>
-                    <button onclick='viewShape(\"${key}\")'>View</button>
+                    <button class="view-btn" onclick='viewShape(\"${key}\")'>View</button>
                     </div>
             `);
           }
         </script>
-        <div class="example">
-          <code></code><label>Random Shape</label>
-          <button onclick="randomShape()">Randomize</button>
-        </div>
+        <br />
+        <div class="hint">Click on the image to get a random shape!</div>
       </div>
     </div>
 
@@ -182,11 +189,7 @@
       >
       | <a target="_blank" href="https://discord.gg/vqe4AuJ48v">Discord</a> |
       <a target="_blank" href="https://github.com/Sans3108/shapez.io-viewer"
-        >Github (Sans3108 fork)</a
-      >
-      |
-      <a target="_blank" href="https://github.com/tobspr/shapez.io"
-        >Github (Original)</a
+        >Github</a
       >
     </div>
   </body>

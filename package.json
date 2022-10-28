@@ -1,17 +1,26 @@
 {
-  "name": "shape_generator",
+  "name": "shape-generator",
   "version": "1.0.0",
   "main": "server.js",
-  "license": "MIT",
+  "license": "ISC",
   "private": true,
-  "devDependencies": {
-    "express": "^4.18.2",
-    "http-server": "^0.12.3"
+  "dependencies": {
+    "canvas": "^2.10.1",
+    "ejs": "^3.1.8",
+    "express": "^4.18.2"
   },
   "scripts": {
-    "serve": "http-server . -p 9000 -g --cors -o -c-1"
+    "start": "node server.js"
   },
-  "dependencies": {
-    "canvas": "^2.10.1"
-  }
+  "description": "Allow to generate and view any shapez.io shape",
+  "devDependencies": {},
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Sans3108/shapez.io-viewer.git"
+  },
+  "author": "Sans3108",
+  "bugs": {
+    "url": "https://github.com/Sans3108/shapez.io-viewer/issues"
+  },
+  "homepage": "https://github.com/Sans3108/shapez.io-viewer#readme"
 }

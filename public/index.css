@@ -1,3 +1,17 @@
+:root {
+  --bg: rgb(31, 31, 31);
+  --bg-secondary: rgb(62, 62, 62);
+  --bg-tertiary: rgb(92, 92, 92);
+  --bg-result: rgb(231, 231, 231);
+  --accent: rgb(123, 145, 255);
+  --accent-light: rgb(246, 246, 246);
+  --accent-dark: rgb(103, 103, 103);
+  --text-light: rgb(235, 235, 235);
+  --text-dark: black;
+  --green: rgb(96, 242, 96);
+  --red: rgb(255, 119, 119);
+}
+
 * {
   margin: 0;
   padding: 0;
@@ -11,7 +25,7 @@ body {
   display: flex;
   flex-direction: column;
   font-family: "Barlow", sans-serif;
-  background: #fff;
+  background: var(--bg);
   align-items: center;
 }
 
@@ -29,7 +43,7 @@ h3 {
 
 h1 {
   margin-bottom: 30px;
-  color: #888;
+  color: var(--text-light);
   text-align: center;
 }
 
@@ -39,48 +53,23 @@ h1 {
 }
 
 code {
-  background: #fff;
-  padding: 1px 4px;
+  border-radius: 15px;
+  color: var(--text-dark);
+  background: var(--accent-light);
+  padding: 4px 6px;
 }
 
 a {
   text-decoration: none;
-  color: #39f;
-}
-
-.nftHint {
-  background: #3291e9;
-  color: #fff;
-  padding: 20px;
-  width: 1210px;
-  font-size: 19px;
-  border-radius: 5px;
-  text-decoration: none;
-  margin: 20px 0 30px;
-  cursor: pointer;
-
-  display: grid;
-  grid-template-columns: 1fr auto;
-  align-items: center;
-  justify-content: center;
-  transition: opacity 0.12s ease-in-out;
-  box-shadow: 0 1px 20px 0 #3291e9;
-}
-
-.nftHint:hover {
-  opacity: 0.9;
-}
-
-.nftHint strong {
-  display: block;
-  margin-top: 20px;
+  color: var(--accent);
 }
 
 #resultWrapper {
-  border: 1px solid #ccc;
+  border: 2px solid var(--accent-dark);
+  border-radius: 20px;
   margin-top: 10px;
   margin-bottom: 10px;
-  background: #fff;
+  background: var(--bg-result);
   padding: 40px;
   text-align: center;
 }
@@ -93,11 +82,14 @@ a {
 #code {
   width: 100%;
   font-family: monospace;
-  padding: 30px;
+  padding: 10px;
   box-sizing: border-box;
-  border: 1px solid #ccc;
-  background: #fff;
+  border: 2px solid var(--accent-dark);
+  color: var(--text-light);
+  border-radius: 20px;
+  background: var(--bg-tertiary);
   font-size: 17px;
+  overflow: scroll;
 }
 
 #code:focus {
@@ -107,22 +99,52 @@ a {
 
 #error {
   /* height: 40px; */
-  color: #f77;
-  margin-top: 10px;
+  color: var(--red);
+  margin: 2%;
   display: flex;
   text-align: left;
   align-items: center;
 }
 
 #error:not(.hasError) {
-  color: rgb(71, 179, 71);
+  color: var(--green);
+}
+
+#sharing {
+  color: var(--green);
+  margin: 2%;
+  transition: opacity 0.12s ease-in-out;
+  text-align: center;
+  opacity: 0;
+}
+
+.hint {
+  text-align: center;
+}
+
+.btn-wrapper {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 2%;
+  gap: 5px;
+}
+
+.btn-wrapper button:first-child {
+  border-top-left-radius: 20px;
+  border-bottom-left-radius: 20px;
+}
+
+.btn-wrapper button:nth-child(2) {
+  border-top-right-radius: 20px;
+  border-bottom-right-radius: 20px;
 }
 
 button {
   padding: 9px 16px;
+  border: none;
   text-transform: uppercase;
   background: #39f;
-  border: 0;
   color: #fff;
   cursor: pointer;
   transition: opacity 0.12s ease-in-out;
@@ -151,7 +173,10 @@ button:hover {
 }
 
 .infoBox {
-  background: #eee;
+  color: var(--text-light);
+  border: 2px solid var(--accent-dark);
+  border-radius: 20px;
+  background: var(--bg-secondary);
   padding: 20px;
 }
 .infoBox h3 {
@@ -194,8 +219,10 @@ button:hover {
 }
 
 .example button {
-  padding: 1px 3px;
+  border-radius: 20px;
+  padding: 4px 6px;
 }
+
 .footer {
   margin-top: 30px;
   margin-bottom: 30px;
@@ -204,21 +231,30 @@ button:hover {
 }
 
 .footer a {
-  color: #777;
+  color: rgb(119, 119, 119);
   padding: 5px;
+  transition: color 0.12s ease-in-out;
+}
+
+.footer a:hover {
+  color: var(--text-light);
 }
 
 @media screen and (max-width: 768px) {
+  .col {
+    margin: 2%;
+    display: flexbox;
+  }
+
   .grid {
     flex-direction: column;
   }
   .col {
     box-sizing: border-box;
     max-width: none;
-    width: 100%;
-    margin: 0;
   }
   #error {
+    /* margin: 2%; */
     padding: 0 10px;
   }
 }

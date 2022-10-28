@@ -127,15 +127,15 @@ function fromShortKey(key) {
   for (let i = 0; i < sourceLayers.length; ++i) {
     const text = sourceLayers[i];
     if (text.length !== 8) {
-      throw new Error("Invalid layer: '" + text + "' -> must be 8 characters");
+      throw new Error(`Layers must be 8 characters long!`);
     }
 
     if (text === "--".repeat(4)) {
-      throw new Error("Empty layers are not allowed");
+      throw new Error("Empty layers are not allowed!");
     }
 
     if (!layerRegex.test(text)) {
-      throw new Error("Invalid syntax in layer " + (i + 1));
+      throw new Error(`Invalid syntax in layer ${i + 1}!`);
     }
 
     const quads = [null, null, null, null];
@@ -170,7 +170,7 @@ function renderShape(layers) {
   const context = canvas.getContext("2d");
 
   context.save();
-  context.fillStyle = "#fff";
+  context.fillStyle = "rgb(231, 231, 231)";
 
   const w = isNode ? 200 : 512;
   const h = isNode ? 200 : 512;
@@ -180,7 +180,7 @@ function renderShape(layers) {
   context.translate((w * dpi) / 2, (h * dpi) / 2);
   context.scale((dpi * w) / 28, (dpi * h) / 28);
 
-  context.fillStyle = "#e9ecf7";
+  //context.fillStyle = "#e9ecf7";
 
   const quadrantSize = 10;
   const quadrantHalfSize = quadrantSize / 2;
@@ -304,7 +304,7 @@ function showError(msg) {
   if (msg) {
     errorDiv.innerText = msg;
   } else {
-    errorDiv.innerText = "Shape generated";
+    errorDiv.innerText = "Shape generated!";
   }
 }
 
@@ -318,7 +318,7 @@ function generate() {
   try {
     parsed = fromShortKey(code);
   } catch (ex) {
-    showError(ex);
+    showError(ex.toString().slice(7));
     return;
   }
 
@@ -349,7 +349,7 @@ function exportShape(canvas) {
     canvas = document.getElementById("result");
   }
   if (isNode) return canvas.toBuffer();
-  
+
   const imageURL = canvas.toDataURL("image/png");
   const dummyLink = document.createElement("a");
   dummyLink.download = "shape.png";
@@ -363,6 +363,15 @@ function exportShape(canvas) {
   document.body.appendChild(dummyLink);
   dummyLink.click();
   document.body.removeChild(dummyLink);
+
+  const share = document.getElementById("sharing");
+
+  share.innerText = "Done, check your downloads!";
+  share.style.opacity = 100;
+
+  setTimeout(() => {
+    share.style.opacity = 0;
+  }, 5000);
 }
 
 if (isNode) module.exports.exportShape = exportShape;
@@ -376,14 +385,21 @@ function shareShape() {
   const code = document.getElementById("code").value.trim();
   const url = "https://shapez.sans-stuff.xyz/?" + code.replace(/:/gi, ".");
 
-  let temp = document.createElement('input');
+  let temp = document.createElement("input");
   temp.value = url;
   document.body.appendChild(temp);
   temp.select();
   document.execCommand("copy");
   document.body.removeChild(temp);
 
-  confirm("The URL has been copied to your clipboard!");
+  const share = document.getElementById("sharing");
+
+  share.innerText = "The URL has been copied to your clipboard!";
+  share.style.opacity = 100;
+
+  setTimeout(() => {
+    share.style.opacity = 0;
+  }, 5000);
 }
 
 function getRandomInt(max) {

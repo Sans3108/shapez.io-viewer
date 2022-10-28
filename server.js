@@ -1,36 +1,24 @@
 const express = require("express");
-const fs = require("fs");
 const path = require("path");
+
+const index = require("./public/index.js");
 
 const app = express();
 
-const index = require("./public/index.js");
+app.set("view engine", "ejs");
 
 const PORT = 3000;
 
 app.get("/", async (req, res) => {
-  const shapeCode = Object.keys(req.query)[0]?.replace(/\./gi, ":");
+  const code = Object.keys(req.query)[0]?.replace(/\./gi, ":");
 
-  const imageURL = `https://shapez.sans-stuff.xyz/image/?code=${shapeCode}`;
+  const imageURL = code
+    ? `https://shapez.sans-stuff.xyz/image/?code=${code}`
+    : "https://shapez.sans-stuff.xyz/logo.png";
 
-  const url =
-    "https://shapez.sans-stuff.xyz/" + (shapeCode ? `?${shapeCode}` : "");
+  const url = `https://shapez.sans-stuff.xyz/${code ? `?${code}` : ""}`;
 
-  let htmlString = fs.readFileSync("./public/index.html", {
-    encoding: "utf8",
-    flag: "r",
-  });
-
-  // IMAGEDATA, TITLE, DESCRIPTION, URL
-  htmlString = htmlString
-    .replaceAll("{{TITLE}}", shapeCode || "Shape Generator")
-    .replaceAll(
-      "{{IMAGEDATA}}",
-      shapeCode ? imageURL : "https://shapez.sans-stuff.xyz/logo.png"
-    )
-    .replaceAll("{{URL}}", url);
-
-  res.send(htmlString);
+  res.render("index", { imageURL: imageURL, url: url, color: "#66a7ff" });
 });
 
 // I coulda done this better tbh
