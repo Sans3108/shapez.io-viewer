@@ -57,6 +57,7 @@ code {
   color: var(--text-dark);
   background: var(--accent-light);
   padding: 4px 6px;
+  white-space: nowrap;
 }
 
 a {
