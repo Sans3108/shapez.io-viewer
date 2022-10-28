@@ -322,6 +322,8 @@ function generate() {
     return;
   }
 
+  window.history.replaceState({ id: 420 }, "Shape Viewer", `/?${code.replace(/:/gi, ".")}`);
+
   renderShape(parsed);
 }
 
