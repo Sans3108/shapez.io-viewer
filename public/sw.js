@@ -1,5 +1,5 @@
 const staticShapeViewer = 'shape-viewer-site-v1';
-const assets = ['/', '/index.html', '/index.css', '/index.js', '/logo.png', '/favicon.ico', 'icon144.png'];
+const assets = ['/', '/index.html', '/index.css', '/index.js', '/logo.png', '/favicon.ico', 'icon144.png', 'icon512.png'];
 
 self.addEventListener('install', installEvent => {
   installEvent.waitUntil(
